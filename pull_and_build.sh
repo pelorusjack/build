@@ -5,11 +5,13 @@ IFS=$'\n\t'
 # blocknetdx autobuilder
 export HOME=/home/dev
 export GITIAN=$HOME/git/gitian-builder/
-export GITHUB_TOKEN=<token>
+export GITHUB_TOKEN=d572cf9939485c9f1da99d97e17c904fbc6afcb7
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export FILEPATH=$HOME/out
 export REPOPATH=$HOME/git/BlockDX
+
+pwd=$(pwd)
 
 lastsuccessbuild=$(cat "./lastsuccessbuild.txt")
 echo "old tag: ${lastsuccessbuild}"
@@ -69,7 +71,7 @@ if [ "${lastsuccessbuild}" != "${newesttag}" ]; then
         --tag v${newesttag} \
         --name "blocknetdx-${newesttag}-osx64.tar.gz" \
         --file $FILEPATH/blocknetdx-${newesttag}-osx64.tar.gz && 
-
+  cd $pwd && 
   echo "${newesttag}" > "./lastsuccessbuild.txt" &&
   echo "Completed build and release of v${newesttag}"
 fi

@@ -6,6 +6,8 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "@slack/client": "^3.14.0",
+    "dotenv": "^4.0.0",
     "express": "3.x.x",
     "express-ipfilter": "^0.3.1",
     "jade": "*"
