@@ -5,7 +5,7 @@ IFS=$'\n\t'
 # blocknetdx autobuilder
 export HOME=/home/dev
 export GITIAN=$HOME/git/gitian-builder/
-export GITHUB_TOKEN=d572cf9939485c9f1da99d97e17c904fbc6afcb7
+export GITHUB_TOKEN=<token>
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 export FILEPATH=$HOME/out
@@ -27,12 +27,19 @@ cd $GITIAN
 if [ "${lastsuccessbuild}" != "${newesttag}" ]; then
 
   ./bin/gbuild --commit blocknetdx=v${newesttag} ../BlockDX/contrib/gitian-descriptors/gitian-win.yml -j64 &&
+  echo "Windows build completed" &&
+  find ./build/out -maxdepth 1 -type f | xargs -I {} cp {} $FILEPATH &&
+
   ./bin/gbuild --commit blocknetdx=v${newesttag} ../BlockDX/contrib/gitian-descriptors/gitian-linux.yml -j64 &&
+  echo "Linux build completed" &&
+  find ./build/out -maxdepth 1 -type f | xargs -I {} cp {} $FILEPATH &&
+
   ./bin/gbuild --commit blocknetdx=v${newesttag} ../BlockDX/contrib/gitian-descriptors/gitian-osx.yml -j64 &&
+  echo "OS X build completed" &&
 
   #https://unix.stackexchange.com/questions/101916/copy-only-regular-files-from-one-directory-to-another/101923?noredirect=1#comment459686_101923
   #cp ./build/out/* $FILEPATH &&
-  find ./build/out -maxdepth 1 -type f | xargs -I {} cp {} $FILEPATH
+  find ./build/out -maxdepth 1 -type f | xargs -I {} cp {} $FILEPATH &&
 
   shasum=$(python extract_shas.py) && 
   echo "${shasum}" &&
@@ -74,6 +81,7 @@ if [ "${lastsuccessbuild}" != "${newesttag}" ]; then
   cd $pwd && 
   echo "${newesttag}" > "./lastsuccessbuild.txt" &&
   echo "Completed build and release of v${newesttag}"
+  
 fi
 
 
